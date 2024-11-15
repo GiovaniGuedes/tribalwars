@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Envio de Apoio - Tribal Wars</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ead9af;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 320px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #aa9872;
+        }
+	label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, button {
+            padding: 8px;
+            width: 100%;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #896c50;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #776650;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+		a {
+			color: #896c50; /* Cor do link */
+			font-weight: bold; /* Negrito */
+			text-decoration: none; /* Remove o sublinhado */
+			transition: color 0.3s ease, transform 0.2s ease; /* Transição suave para hover */
+		}
+
+		a:hover {
+			color: #776650; /* Cor ao passar o mouse */
+			transform: scale(1.05); /* Leve aumento ao passar o mouse */
+			text-decoration: underline; /* Sublinhado ao passar o mouse */
+		}
+
+		a:active {
+			color: #896c50; /* Cor ao clicar */
+			transform: scale(0.95); /* Leve diminuição ao clicar */
+		}
+
+    </style
+</head>
+<body>
+
+<div class="container">
+    <h2>Calculadora de Envio de Apoio</h2>
+    
+    <label for="horaAtaque">Hora do ataque (hh:mm:ss)</label>
+    <input type="text" id="horaAtaque" placeholder="ex: 03:04:00" required>
+
+    <label for="tempoViagem">Tempo de viagem (hh:mm:ss)</label>
+    <input type="text" id="tempoViagem" placeholder="ex: 05:00:00" required>
+
+    <button onclick="calcularHoraEnvio()">Calcular Hora de Envio</button>
+	
+    <div class="result" id="resultado"></div>
+	
+	<a href="https://br.twstats.com/" target="_blank">Acesse twstats</a>
+</div>
+    <script>
+        function calcularHoraEnvio() {
+            // Obter os valores de hora do ataque e tempo de viagem
+            let horaAtaque = document.getElementById('horaAtaque').value;
+            let tempoViagem = document.getElementById('tempoViagem').value;
+
+            if (horaAtaque && tempoViagem) {
+                // Converter hora do ataque e tempo de viagem para segundos
+                let horaAtaqueArray = horaAtaque.split(":");
+                let tempoViagemArray = tempoViagem.split(":");
+
+                let horaAtaqueSegundos = (+horaAtaqueArray[0]) * 3600 + (+horaAtaqueArray[1]) * 60 + (+horaAtaqueArray[2]);
+                let tempoViagemSegundos = (+tempoViagemArray[0]) * 3600 + (+tempoViagemArray[1]) * 60 + (+tempoViagemArray[2]);
+
+                // Calcular o horário de envio (subtrair o tempo de viagem)
+                let horaEnvioSegundos = horaAtaqueSegundos - tempoViagemSegundos;
+
+                // Se o resultado for negativo, adicionar 24 horas (86400 segundos) para corrigir
+                if (horaEnvioSegundos < 0) {
+                    horaEnvioSegundos += 86400;
+                }
+
+                // Converter o resultado de volta para o formato hh:mm:ss
+                let horas = Math.floor(horaEnvioSegundos / 3600).toString().padStart(2, '0');
+                let minutos = Math.floor((horaEnvioSegundos % 3600) / 60).toString().padStart(2, '0');
+                let segundos = (horaEnvioSegundos % 60).toString().padStart(2, '0');
+
+                // Exibir o resultado
+                document.getElementById('resultado').innerText = `Você deve enviar o apoio às: ${horas}:${minutos}:${segundos}`;
+            } else {
+                document.getElementById('resultado').innerText = "Por favor, preencha todos os campos.";
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Back Time - Tribal Wars</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ead9af;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 320px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #aa9872;
+        }
+		label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, button {
+            padding: 8px;
+            width: 100%;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #896c50;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #776650;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+		
+		a {
+			color: #896c50; /* Cor do link */
+			font-weight: bold; /* Negrito */
+			text-decoration: none; /* Remove o sublinhado */
+			transition: color 0.3s ease, transform 0.2s ease; /* Transição suave para hover */
+		}
+
+		a:hover {
+			color: #776650; /* Cor ao passar o mouse */
+			transform: scale(1.05); /* Leve aumento ao passar o mouse */
+			text-decoration: underline; /* Sublinhado ao passar o mouse */
+		}
+
+		a:active {
+			color: #896c50; /* Cor ao clicar */
+			transform: scale(0.95); /* Leve diminuição ao clicar */
+		}
+
+    </style>
+</head>
+<body>
+<div class="container">
+  <h2>Calculadora Back Time</h2>
+
+  <label for="horaAtaque">Hora de Impacto do Ataque Inimigo (hh:mm:ss):</label><br>
+  <input type="time" id="horaAtaque" step="1" required><br>
+
+  <label for="tempoViagem">Tempo de Viagem do Ataque Inimigo (hh:mm:ss):</label><br>
+  <input type="time" id="tempoViagem" step="1" required><br>
+
+  <button onclick="calcularBackTime()">Calcular Back Time</button>
+
+  <h3 id="resultado"></h3>
+  <a href="https://br.twstats.com/" target="_blank">Acesse twstats</a>
+</div>
+  <script>
+    function calcularBackTime() {
+      const horaAtaque = document.getElementById("horaAtaque").value;
+      const tempoViagem = document.getElementById("tempoViagem").value;
+
+      if (!horaAtaque || !tempoViagem) {
+        document.getElementById("resultado").innerText = "Por favor, insira ambos os valores.";
+        return;
+      }
+
+      const [ataqueHoras, ataqueMinutos, ataqueSegundos] = horaAtaque.split(":").map(Number);
+      const [viagemHoras, viagemMinutos, viagemSegundos] = tempoViagem.split(":").map(Number);
+
+      // Converte todos os tempos para segundos para facilitar o cálculo
+      const totalAtaqueSegundos = (ataqueHoras * 3600) + (ataqueMinutos * 60) + ataqueSegundos;
+      const totalViagemSegundos = (viagemHoras * 3600) + (viagemMinutos * 60) + viagemSegundos;
+
+      // Calcula o horário de retorno das tropas inimigas
+      const retornoSegundos = totalAtaqueSegundos + totalViagemSegundos;
+
+      // Converte o tempo de volta para horas, minutos e segundos
+      const retornoHoras = Math.floor((retornoSegundos % (24 * 3600)) / 3600);
+      const retornoMinutos = Math.floor((retornoSegundos % 3600) / 60);
+      const retornoSegundosRestantes = retornoSegundos % 60;
+
+      // Exibe o horário de retorno para que você possa enviar o contra-ataque nesse momento
+      document.getElementById("resultado").innerText =
+        `Hora para Retorno das Tropas Inimigas: ${retornoHoras.toString().padStart(2, '0')}:${retornoMinutos.toString().padStart(2, '0')}:${retornoSegundosRestantes.toString().padStart(2, '0')}`;
+    }
+  </script>
+
+</body>
+
+</html>

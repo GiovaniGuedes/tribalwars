@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Snipe - Tribal Wars</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ead9af;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 320px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+	    color: #aa9872;
+        }
+
+	label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"], button {
+	    padding: 8px;
+            width: 100%;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+      button {
+            background-color: #896c50;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+       button:hover {
+            background-color: #776650;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+			
+        }
+        table, th, td {
+            border: 0px solid black;
+			background-color: #ead9af;
+			font-family: Arial, sans-serif;
+			font-size: 12pt;
+			font-weight: bold;
+        }
+        th, td {
+            padding: 10px;
+        }
+		
+		a {
+			color: #896c50; /* Cor do link */
+			font-weight: bold; /* Negrito */
+			text-decoration: none; /* Remove o sublinhado */
+			transition: color 0.3s ease, transform 0.2s ease; /* Transição suave para hover */
+		}
+
+		a:hover {
+			color: #776650; /* Cor ao passar o mouse */
+			transform: scale(1.05); /* Leve aumento ao passar o mouse */
+			text-decoration: underline; /* Sublinhado ao passar o mouse */
+		}
+
+		a:active {
+			color: #896c50; /* Cor ao clicar */
+			transform: scale(0.95); /* Leve diminuição ao clicar */
+		}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora de Snipe</h2>
+        <label for="arrival-time">Hora de chegada do ataque (hh:mm:ss):</label><br>
+        <input type="text" id="arrival-time" placeholder="00:00:00"><br>
+        <button onclick="calculateTimes()">Calcular</button>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Tempo (minutos)</th>
+                    <th>Hora de envio</th>
+                    <th>Hora de cancelamento</th>
+                </tr>
+            </thead>
+            <tbody id="result-table"></tbody>
+        </table>
+	<a href="https://br.twstats.com/" target="_blank">Acesse twstats</a>	
+    </div>
+
+    <script>
+        function calculateTimes() {
+            const arrivalTimeInput = document.getElementById("arrival-time").value;
+
+            if (!arrivalTimeInput) {
+                alert("Por favor, insira a hora de chegada do ataque.");
+                return;
+            }
+
+            const timeParts = arrivalTimeInput.split(":");
+            if (timeParts.length !== 3) {
+                alert("Por favor, insira a hora no formato HH:MM:SS.");
+                return;
+            }
+
+            const [hours, minutes, seconds] = timeParts.map(Number);
+
+            if (isNaN(hours) || isNaN(minutes) || isNaN(seconds) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59) {
+                alert("Hora inválida. Certifique-se de inserir valores válidos para hh:mm:ss.");
+                return;
+            }
+
+            // Cria um objeto Date com o horário inserido
+            const now = new Date();
+            now.setHours(hours, minutes, seconds, 0);
+
+            // Tempos em minutos para o cálculo
+            const times = [20, 18, 16, 14, 12, 10, 8, 6, 4, 2]; 
+            const resultTable = document.getElementById("result-table");
+            resultTable.innerHTML = ""; // Limpa os resultados anteriores
+
+            times.forEach(time => {
+                const sendTime = new Date(now.getTime() - time * 60000); // Calcula o horário de envio (minutos)
+                const cancelTime = new Date(now.getTime() - time * 30000); // Calcula o horário de cancelamento (meio tempo)
+
+                // Formatação das horas no estilo hh:mm:ss
+                const sendTimeFormatted = sendTime.toLocaleTimeString("pt-BR");
+                const cancelTimeFormatted = cancelTime.toLocaleTimeString("pt-BR");
+
+                // Adiciona a linha na tabela
+                const row = `
+                    <tr>
+                        <td>${time}</td>
+                        <td>${sendTimeFormatted}</td>
+                        <td>${cancelTimeFormatted}</td>
+                    </tr>
+                `;
+                resultTable.innerHTML += row;
+            });
+        }
+    </script>
+</body>
+</html>

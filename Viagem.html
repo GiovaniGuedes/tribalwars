@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Tempo de Viagem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ead9af;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 320px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #aa9872;
+        }
+	label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, button {
+            padding: 8px;
+            width: 100%;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #896c50;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #776650;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+		a {
+			color: #896c50; /* Cor do link */
+			font-weight: bold; /* Negrito */
+			text-decoration: none; /* Remove o sublinhado */
+			transition: color 0.3s ease, transform 0.2s ease; /* Transição suave para hover */
+		}
+
+		a:hover {
+			color: #776650; /* Cor ao passar o mouse */
+			transform: scale(1.05); /* Leve aumento ao passar o mouse */
+			text-decoration: underline; /* Sublinhado ao passar o mouse */
+		}
+
+		a:active {
+			color: #896c50; /* Cor ao clicar */
+			transform: scale(0.95); /* Leve diminuição ao clicar */
+		}
+
+    </style
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora de Tempo de Viagem</h2>
+
+        <label for="startDate">Data de Inicio:</label>
+        <input type="date" id="startDate">
+
+        <label for="startTime">Hora de Inicio (hh:mm:ss):</label>
+        <input type="time" id="startTime" step="1">
+
+        <label for="endDate">Data de Fim:</label>
+        <input type="date" id="endDate">
+
+        <label for="endTime">Hora de Fim (hh:mm:ss):</label>
+        <input type="time" id="endTime" step="1">
+
+        <button onclick="calculateTimeDifference()">Calcular</button>
+        
+        <div id="result"></div>
+		<a href="https://br.twstats.com/" target="_blank">Acesse twstats</a>
+    </div>
+
+    <script>
+        function calculateTimeDifference() {
+            const startDate = document.getElementById("startDate").value;
+            const startTime = document.getElementById("startTime").value;
+            const endDate = document.getElementById("endDate").value;
+            const endTime = document.getElementById("endTime").value;
+
+            if (!startDate || !startTime || !endDate || !endTime) {
+                document.getElementById("result").innerText = "Por favor, preencha todos os campos.";
+                return;
+            }
+
+            const start = new Date(`${startDate}T${startTime}`);
+            const end = new Date(`${endDate}T${endTime}`);
+
+            if (start >= end) {
+                document.getElementById("result").innerText = "A data de fim deve ser posterior à data de início.";
+                return;
+            }
+
+            let difference = end - start; // diferença em milissegundos
+
+            const hours = Math.floor(difference / (1000 * 60 * 60));
+            difference %= (1000 * 60 * 60);
+
+            const minutes = Math.floor(difference / (1000 * 60));
+            difference %= (1000 * 60);
+
+            const seconds = Math.floor(difference / 1000);
+
+            document.getElementById("result").innerText = 
+                `${hours} horas, ${minutes} minutos e ${seconds} segundos`;
+        }
+    </script>
+</body>
+</html>
